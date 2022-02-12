@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/AbstractClassDemo/AbstractClassDemo.iml" filepath="$PROJECT_DIR$/AbstractClassDemo/AbstractClassDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AnonymousInnerClass/AnonymousInnerClass.iml" filepath="$PROJECT_DIR$/AnonymousInnerClass/AnonymousInnerClass.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Generics/GenericMethodDemo/GenericMethodDemo.iml" filepath="$PROJECT_DIR$/Generics/GenericMethodDemo/GenericMethodDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Generics/GenericStack/GenericStack.iml" filepath="$PROJECT_DIR$/Generics/GenericStack/GenericStack.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Generics/GenericTupla/GenericTupla.iml" filepath="$PROJECT_DIR$/Generics/GenericTupla/GenericTupla.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/POO-2022.iml" filepath="$PROJECT_DIR$/.idea/POO-2022.iml" />
+    </modules>
+  </component>
+</project>
