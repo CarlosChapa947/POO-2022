@@ -8,6 +8,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,11 +32,15 @@ public class Main {
  */
 class Agenda extends JFrame {
     private JTextField tfName; // campos de datos
-    private JButton btnAdd, btnDelete; // acciones
+    private JButton btnAdd, btnDelete, btnSave; // acciones
     private MyTextField tfPhone; //JTextfield personalizado
     // JTable nos sirve para almacenar el listado de datos que deseamos mostrar al usuario
     private JTable table;
     private DefaultTableModel model; // JTable utiliza un modelo para mantener referencia a los datos
+
+    private final String ENTRY_SEPARATOR = "-";
+    private final String PAIR_SEPARATOR = ":";
+    private final String FILENAME = "Agenda.txt";
 
     public Agenda () {
         super ("Agenda Telefónica");
@@ -61,6 +70,9 @@ class Agenda extends JFrame {
                     tfName.grabFocus ();
                 else if (tfPhone.getText ().length () == 0)
                     tfPhone.grabFocus ();
+
+                tfPhone.setText (null);
+                tfName.setText (null);
             }
         });
 
@@ -79,6 +91,39 @@ class Agenda extends JFrame {
             }
         });
 
+        btnSave = new JButton ("Save");
+        btnSave.addActionListener (event -> {
+            StringBuilder builder = new StringBuilder ();
+
+            for (int i = 0; i < model.getRowCount (); i++) {
+                String name = (String) model.getValueAt(i, 0);
+                String phone = (String) model.getValueAt(i, 1);
+                builder.append (String.format ("%s%s%s", name, PAIR_SEPARATOR, phone));
+                builder.append (ENTRY_SEPARATOR);
+            }
+
+            if (builder.length () <= 0) return;
+
+            OutputStreamWriter writer = null;
+
+            try {
+                File agenda = new File (FILENAME);
+                FileOutputStream fos = new FileOutputStream (agenda);
+                writer = new OutputStreamWriter (fos, StandardCharsets.UTF_8);
+                writer.write (builder.toString ());
+
+                JOptionPane.showMessageDialog (this,"Saved!");
+            } catch (IOException ex) {
+                ex.printStackTrace ();
+            } finally {
+                try {
+                    if (writer != null)
+                        writer.close ();
+                } catch (IOException ioex ) {
+                    ioex.printStackTrace ();
+                }
+            }
+        });
         // definimos la estructura del modelo que será utilizado por el JTable
         model = new DefaultTableModel ();
         model.addColumn ("Nombre"); // constará de dos columnas, nombre
@@ -89,6 +134,7 @@ class Agenda extends JFrame {
         table.setGridColor (Color.LIGHT_GRAY);
         table.setShowHorizontalLines (true);
         table.setShowVerticalLines (true);
+        table.setDefaultEditor (Object.class, null);
 
         // como contenedor para los campos de datos usamos un JPanel
         // con un layout tipo GridLayout de 2 x 2
@@ -112,6 +158,7 @@ class Agenda extends JFrame {
         // al botón ELIMINAR lo colocamos en un contenedor JPanel, con el objetivo de agegar más controles
         // en esa sección posteriormente
         JPanel pnlBOTTOM = new JPanel ();
+        pnlBOTTOM.add (btnSave);
         pnlBOTTOM.add (btnDelete);
 
         // establecemos las dimensiones iniciales
@@ -128,6 +175,25 @@ class Agenda extends JFrame {
         add (BorderLayout.SOUTH, pnlBOTTOM);
 
         setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE); // establece el comportamiento de cierre
+
+        load ();
     }
 
+    private void load () {
+        Path path = Paths.get (FILENAME);
+
+        if (Files.exists (path)) {
+            try {
+                BufferedReader reader = new BufferedReader (new FileReader (path.toFile()));
+                String data = reader.readLine ();
+                String[] pairs = data.split (ENTRY_SEPARATOR);
+                for (String pair : pairs) {
+                    String[] entry = pair.split(PAIR_SEPARATOR);
+                    model.addRow(entry);
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace ();
+            }
+        }
+    }
 }
