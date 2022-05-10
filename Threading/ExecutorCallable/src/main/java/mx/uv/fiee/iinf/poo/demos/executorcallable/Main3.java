@@ -26,6 +26,14 @@ public class Main3 {
         System.out.println ("Executing...");
         service.shutdown ();
         System.out.println ("Scheduler close...");
+
+        System.out.println ("Counting within main thread");
+        for (int i = 0; i < 10; i++) {
+            System.out.println (i);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ex) { ex.printStackTrace (); }
+        }
     }
 
 }
