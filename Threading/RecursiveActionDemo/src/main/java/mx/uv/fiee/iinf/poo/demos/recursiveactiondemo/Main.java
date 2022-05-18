@@ -41,11 +41,11 @@ class ArrayTransform extends RecursiveAction {
 }
 
 public class Main {
-    static final int SIZE = 10_000_000;
+    static final int SIZE = 100_000_000;
     static int [] array = randomArray ();
         
     public static void main (String [] args) {
-        int number = 10;
+        int number = 10; // filter
         
         System.out.println ("First 10 elements of the array before: ");
         print ();
