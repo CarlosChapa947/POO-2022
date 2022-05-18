@@ -30,7 +30,7 @@ public class Main {
         Future<String> strFuture = executor.submit (callOne);
         Future<Double> dblFuture = executor.submit (callTwo);
 
-        // other tasks
+        // other tasks - main THREAD is available
         
         System.out.println ("Main thread...getting results...");
         
